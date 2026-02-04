@@ -47,11 +47,16 @@ objects:
         - name: tls
           secret:
             secretName: ${PROXY_TLS_SECRET}
+        - name: ca
+          secret:
+            secretName: ${CA_PEM_SECRET}
         volumeMounts:
         - name: config
           mountPath: /config
         - name: tls
           mountPath: /tls
+        - name: ca
+          mountPath: /ca
         resources:
           limits:
             cpu: ${CPU_LIMIT}
@@ -120,10 +125,10 @@ objects:
                           "tls": {
                             "ca": {
                               "provider": "file",
-                              "pem_files": ["/tls/2022-IT-Root-CA.pem"]
+                              "pem_files": ["${CA_PEM_PATH}"]
                             },
-                            "client_certificate_file": "/tls/${PROXY_TLS_CERT_FILENAME}",
-                            "client_certificate_key_file": "/tls/${PROXY_TLS_KEY_FILENAME}"
+                            "client_certificate_file": "${PROXY_TLS_CERT_PATH}",
+                            "client_certificate_key_file": "${PROXY_TLS_KEY_PATH}"
                           },
                           "response_header_timeout": "60s"
                         },
@@ -177,6 +182,8 @@ parameters:
   value: rhsm-api-proxy
 - name: PROXY_TLS_SECRET
   value: proxy-client-tls
+- name: CA_PEM_SECRET
+  value: client-ca-pem
 - name: CPU_LIMIT
   value: 1000m
 - name: CPU_REQUEST
@@ -202,7 +209,9 @@ parameters:
   value: '443'
 - name: APPLICATION
   value: subscriptions,config-manager
-- name: PROXY_TLS_CERT_FILENAME
+- name: PROXY_TLS_CERT_PATH
   value: "/tls/keypair.pem"
-- name: PROXY_TLS_KEY_FILENAME
+- name: PROXY_TLS_KEY_PATH
   value: "/tls/keypair.pem"
+- name: CA_PEM_PATH
+  value: "/tls/2022-IT-Root-CA.pem"
