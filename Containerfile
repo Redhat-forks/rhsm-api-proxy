@@ -3,7 +3,7 @@ LABEL maintainer=teamnado-ops@redhat.com
 
 ENV GODIR=/usr/local/go APPDIR=/opt/app CGO_ENABLED=0
 
-RUN curl -sfL --retry 10 -o /tmp/go.tar.gz https://go.dev/dl/go1.25.5.linux-amd64.tar.gz && \
+RUN curl -sfL --retry 10 -o /tmp/go.tar.gz https://go.dev/dl/go1.26.0.linux-amd64.tar.gz && \
     mkdir -p $GODIR && \
     tar --strip-components=1 -zxf /tmp/go.tar.gz --directory $GODIR && \
     rm /tmp/go.tar.gz && \
